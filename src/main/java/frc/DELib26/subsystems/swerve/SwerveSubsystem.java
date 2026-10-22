@@ -2,7 +2,6 @@ package frc.DELib26.subsystems.swerve;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.ctre.phoenix6.swerve.utility.PhoenixPIDController;
@@ -16,10 +15,11 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.DELib26.controller.GenericController;
-import frc.DELib26.subsystems.swerve.SwerveIO.ModuleIOInputs;
-import frc.DELib26.subsystems.swerve.SwerveIO.Pigeon2IOInputs;
-import frc.DELib26.subsystems.swerve.SwerveIO.SwerveIOInputs;
-import frc.DELib26.subsystems.swerve.swerveUtil.FieldOfMeritHelper;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIO;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIO.ModuleIOInputs;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIO.Pigeon2IOInputs;
+import frc.DELib26.subsystems.swerve.swerveIO.SwerveIO.SwerveIOInputs;
+import frc.DELib26.subsystems.swerve.swerveUtil.OdometryTrustMode;
 import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import frc.DELib26.subsystems.swerve.swerveUtil.SwerveSubsystemConstants;
 import frc.DELib26.subsystems.vision.visionUtil.VisionFieldPoseEstimate;
@@ -57,7 +57,6 @@ public class SwerveSubsystem extends SubsystemBase {
 	private final RobotState robotState;
 
 	private final GenericController controller;
-	private final FieldOfMeritHelper fomHelper;
 
 	private Pose2d desiredPoseForDriveToPoint = new Pose2d();
 	private Rotation2d desiredRotationForHeadingLock = new Rotation2d();
@@ -104,12 +103,6 @@ public class SwerveSubsystem extends SubsystemBase {
 		this.driveAtAngle.HeadingController = swerveConfig.ROTATION_CONTROLLER.toPhoenixPIDController();
 		this.driveAtAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
-		this.fomHelper = new FieldOfMeritHelper(
-			((SwerveDrivetrain<?, ?, ?>) this.io).getKinematics(),
-			this.swerveInputs,
-			this.pigeon2Inputs
-		);
-
 		this.robotState = robotState;
 	}
 
@@ -123,9 +116,17 @@ public class SwerveSubsystem extends SubsystemBase {
 		);
 		this.io.updatePigeon2Inputs(this.pigeon2Inputs);
 		this.io.setStandardDeviationsForState(
-			this.fomHelper.getOdometryTrustMode(this.getRobotSpeeds()).getStateStdDevs()
+			this.getOdometryTrustMode().getStateStdDevs()
 		);
 		this.robotState.updateFromSwerveInputs(this.swerveInputs, this.pigeon2Inputs);
+	}
+
+	private OdometryTrustMode getOdometryTrustMode() {
+		if (DriverStation.isDisabled()) {
+			return OdometryTrustMode.DISABLED;
+		} else {
+			return OdometryTrustMode.NORMAL;
+		}
 	}
 
 	public final void logTelemetry() {
@@ -144,9 +145,6 @@ public class SwerveSubsystem extends SubsystemBase {
 		Logger.processInputs(KEY + "/Module Data/Back Right", this.backRightInputs);
 
 		Logger.processInputs(KEY + "/Pigeon2", this.pigeon2Inputs);
-
-		this.fomHelper.log(KEY);
-
 	}
 
 	public boolean isManualDriveEnabled() {

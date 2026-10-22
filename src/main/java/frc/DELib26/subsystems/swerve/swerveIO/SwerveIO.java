@@ -1,4 +1,4 @@
-package frc.DELib26.subsystems.swerve;
+package frc.DELib26.subsystems.swerve.swerveIO;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;

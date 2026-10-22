@@ -1,10 +1,11 @@
-package frc.DELib26.subsystems.swerve;
+package frc.DELib26.subsystems.swerve.swerveIO;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
+import frc.DELib26.subsystems.swerve.MapleSimSwerveDrivetrain;
 import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.utils.mathutils.GeometryConvertor;
