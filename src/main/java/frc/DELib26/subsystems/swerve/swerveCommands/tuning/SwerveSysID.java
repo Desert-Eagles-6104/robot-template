@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.DELib26.subsystems.swerve.SwerveSubsystem;
-import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConstants;
+import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import frc.DELib26.subsystems.swerve.swerveUtil.SysIdMechanism;
 import frc.DELib26.util.Conversions;
 
@@ -34,7 +34,7 @@ import static edu.wpi.first.units.Units.Volts;
 public class SwerveSysID extends SequentialCommandGroup {
 	private final String[] names = { "FL", "FR", "BL", "BR" };
 	private final SwerveSubsystem swerveSubsystem;
-	private final SwerveConstants swerveConstants;
+	private final SwerveConfig swerveConstants;
 	/** Last voltage commanded by SysId (used for logging). */
 	private Voltage lastSysIdVolts = Volts.of(0);
 
@@ -45,7 +45,7 @@ public class SwerveSysID extends SequentialCommandGroup {
 	 * @param mechanism Which mechanism to characterize
 	 * @param waitBetweenRuns If true, waits 1 second between each test
 	 */
-	public SwerveSysID(SwerveSubsystem swerve, SwerveConstants swerveConstants, SysIdMechanism mechanism, boolean waitBetweenRuns) {
+	public SwerveSysID(SwerveSubsystem swerve, SwerveConfig swerveConstants, SysIdMechanism mechanism, boolean waitBetweenRuns) {
 		this.swerveSubsystem = swerve;
 		this.swerveConstants = swerveConstants;
 

@@ -20,7 +20,7 @@ import frc.DELib26.subsystems.swerve.SwerveIO.ModuleIOInputs;
 import frc.DELib26.subsystems.swerve.SwerveIO.Pigeon2IOInputs;
 import frc.DELib26.subsystems.swerve.SwerveIO.SwerveIOInputs;
 import frc.DELib26.subsystems.swerve.swerveUtil.FieldOfMeritHelper;
-import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConstants;
+import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import frc.DELib26.subsystems.swerve.swerveUtil.SwerveSubsystemConstants;
 import frc.DELib26.subsystems.vision.visionUtil.VisionFieldPoseEstimate;
 import frc.DELib26.util.FieldUtil;
@@ -85,23 +85,23 @@ public class SwerveSubsystem extends SubsystemBase {
 	public SwerveSubsystem(
 		SwerveIO io,
 		GenericController controller,
-		SwerveConstants swerveConstants,
+		SwerveConfig swerveConfig,
 		RobotState robotState
 	) {
 		this.io = io;
 		this.controller = controller;
-		this.maxVelocity = swerveConstants.MAX_LINEAR_SPEED.in(MetersPerSecond);
-		this.maxAngularVelocity = swerveConstants.getMaxAngularSpeed().in(RadiansPerSecond);
-		this.maxVelocityForDriveToPoint = swerveConstants.INITIAL_MAX_VELOCITY_FOR_DRIVE_TO_POINT.in(MetersPerSecond);
-		this.maxAngularVelocityForDriveToPoint = swerveConstants.getInitialMaxAngularVelocityForDriveToPoint()
+		this.maxVelocity = swerveConfig.MAX_LINEAR_SPEED.in(MetersPerSecond);
+		this.maxAngularVelocity = swerveConfig.getMaxAngularSpeed().in(RadiansPerSecond);
+		this.maxVelocityForDriveToPoint = swerveConfig.INITIAL_MAX_VELOCITY_FOR_DRIVE_TO_POINT.in(MetersPerSecond);
+		this.maxAngularVelocityForDriveToPoint = swerveConfig.getInitialMaxAngularVelocityForDriveToPoint()
 				.in(RadiansPerSecond);
-		this.SKEW_COMPENSATION_SCALAR = swerveConstants.SKEW_COMPENSATION_SCALAR.in(Value);
+		this.SKEW_COMPENSATION_SCALAR = swerveConfig.SKEW_COMPENSATION_SCALAR.in(Value);
 
 		io.registerTelemetryFunction(swerveInputs);
 
-		this.translationController = swerveConstants.TRANSLATION_CONTROLLER.toPIDController();
+		this.translationController = swerveConfig.TRANSLATION_CONTROLLER.toPIDController();
 
-		this.driveAtAngle.HeadingController = swerveConstants.ROTATION_CONTROLLER.toPhoenixPIDController();
+		this.driveAtAngle.HeadingController = swerveConfig.ROTATION_CONTROLLER.toPhoenixPIDController();
 		this.driveAtAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
 		this.fomHelper = new FieldOfMeritHelper(

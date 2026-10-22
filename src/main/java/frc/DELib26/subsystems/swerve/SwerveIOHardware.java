@@ -14,7 +14,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConstants;
+import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import frc.DELib26.subsystems.vision.visionUtil.VisionFieldPoseEstimate;
 import frc.DELib26.util.ProjectConstants;
 
@@ -33,7 +33,7 @@ public class SwerveIOHardware extends SwerveDrivetrain<TalonFX, TalonFX, CANcode
 
 	private Map<Integer, HashMap<String, BaseStatusSignal>> signalsMap = new HashMap<>();
 
-	public SwerveIOHardware(SwerveConstants constants) {
+	public SwerveIOHardware(SwerveConfig constants) {
 		super(
 			TalonFX::new,
 			TalonFX::new,

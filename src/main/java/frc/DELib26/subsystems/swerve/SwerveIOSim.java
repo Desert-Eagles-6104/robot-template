@@ -5,7 +5,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.Units;
-import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConstants;
+import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import org.ironmaple.simulation.SimulatedArena;
 import org.ironmaple.utils.mathutils.GeometryConvertor;
 
@@ -21,7 +21,7 @@ public class SwerveIOSim extends SwerveIOHardware {
 
 	public MapleSimSwerveDrivetrain mapleSimSwerveDrivetrain;
 
-	public SwerveIOSim(SwerveConstants constants) {
+	public SwerveIOSim(SwerveConfig constants) {
 		super(constants);
 		this.mapleSimSwerveDrivetrain = new MapleSimSwerveDrivetrain(
 				constants.ROBOT_MASS,

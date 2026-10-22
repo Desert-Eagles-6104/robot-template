@@ -15,8 +15,7 @@ import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.DELib26.subsystems.swerve.SwerveSubsystem;
-import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConstants;
-import frc.DELib26.util.BaseRobotConstants;
+import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import frc.DELib26.util.FieldUtil;
 import org.littletonrobotics.junction.Logger;
 
@@ -33,11 +32,14 @@ public class PathPlannerAutoBuilder {
 	private final Map<String, Supplier<PathPlannerAuto>> autosMap = new HashMap<>();
 
 	public PathPlannerAutoBuilder(
-			SwerveSubsystem swerveSubsystem, BaseRobotConstants constants, Map<String, Command> namedCommands) {
-		SwerveConstants swerveConstants = constants.swerveConstants;
+			SwerveSubsystem swerveSubsystem,
+			SwerveConfig swerveConfig,
+			Map<String, Command> namedCommands
+		) {
+
 		Pathfinding.setPathfinder(new LocalADStarAK());
 
-		this.robotConfig = getRobotConfig(constants);
+		this.robotConfig = getRobotConfig(swerveConfig);
 
 		AutoBuilder.configure(
 				swerveSubsystem::getPose,
@@ -45,8 +47,8 @@ public class PathPlannerAutoBuilder {
 				swerveSubsystem::getRobotSpeeds,
 				(speeds, feedforwards) -> swerveSubsystem.pathPlannerDriveAuto(speeds, feedforwards),
 				new PPHolonomicDriveController(
-						swerveConstants.PATH_PLANNER_TRANSLATION_CONTROLLER.toPIDConstants(),
-						swerveConstants.PATH_PLANNER_ROTATION_CONTROLLER.toPIDConstants()),
+						swerveConfig.PATH_PLANNER_TRANSLATION_CONTROLLER.toPIDConstants(),
+						swerveConfig.PATH_PLANNER_ROTATION_CONTROLLER.toPIDConstants()),
 				this.robotConfig,
 				() -> !FieldUtil.isBlueAllianceOrDefault(),
 				swerveSubsystem
@@ -67,36 +69,36 @@ public class PathPlannerAutoBuilder {
 				poses -> Logger.recordOutput("PathPlanner/ActivePath", poses.toArray(Pose2d[]::new)));
 	}
 
-	public PathPlannerAutoBuilder(SwerveSubsystem swerveSubsystem, BaseRobotConstants constants) {
-		this(swerveSubsystem, constants, new HashMap<String, Command>());
+	public PathPlannerAutoBuilder(SwerveSubsystem swerveSubsystem, SwerveConfig swerveConfig) {
+		this(swerveSubsystem, swerveConfig, new HashMap<String, Command>());
 	}
 
-	public PathConstraints getDefaultPathConstraints(SwerveConstants swerveConstants) {
+	public PathConstraints getDefaultPathConstraints(SwerveConfig swerveConfig) {
 		return new PathConstraints(
-			swerveConstants.INITIAL_MAX_VELOCITY_FOR_DRIVE_TO_POINT,
-			swerveConstants.MAX_LINEAR_ACCELERATION,
-			swerveConstants.getMaxAngularSpeed(),
-			swerveConstants.MAX_ANGULAR_ACCELERATION
+			swerveConfig.INITIAL_MAX_VELOCITY_FOR_DRIVE_TO_POINT,
+			swerveConfig.MAX_LINEAR_ACCELERATION,
+			swerveConfig.getMaxAngularSpeed(),
+			swerveConfig.MAX_ANGULAR_ACCELERATION
 		);
 	}
 
-	private static RobotConfig getRobotConfig(BaseRobotConstants constants) {
+	private static RobotConfig getRobotConfig(SwerveConfig swerveConfig) {
 		ModuleConfig moduleCfg = new ModuleConfig(
-				constants.swerveConstants.MODULE_HARDWARE_CONSTANTS.getWheelRadius(),
+				swerveConfig.MODULE_HARDWARE_CONSTANTS.getWheelRadius(),
 				// It wants the absolute max speed no reduction for friction,
 				// it took me 7 hours to figure that out. fuck life.
-				constants.swerveConstants.MODULE_HARDWARE_CONSTANTS.getTheoreticalMaxLinearSpeedMps(),
-				constants.swerveConstants.WHEEL_COEFFICIENT_OF_FRICTION.in(Units.Value),
-				constants.swerveConstants.MODULE_HARDWARE_CONSTANTS.driveMotor,
-				constants.swerveConstants.MODULE_HARDWARE_CONSTANTS.driveGearRatio,
-				constants.swerveConstants.DRIVE_STATOR_CURRENT_LIMIT.in(Units.Amps),
+				swerveConfig.MODULE_HARDWARE_CONSTANTS.getTheoreticalMaxLinearSpeedMps(),
+				swerveConfig.WHEEL_COEFFICIENT_OF_FRICTION.in(Units.Value),
+				swerveConfig.MODULE_HARDWARE_CONSTANTS.driveMotor,
+				swerveConfig.MODULE_HARDWARE_CONSTANTS.driveGearRatio,
+				swerveConfig.DRIVE_STATOR_CURRENT_LIMIT.in(Units.Amps),
 				1);
 
 		RobotConfig robotConfig = new RobotConfig(
-				constants.swerveConstants.ROBOT_MASS,
-				constants.swerveConstants.ROBOT_MOMENT_OF_INERTIA,
+				swerveConfig.ROBOT_MASS,
+				swerveConfig.ROBOT_MOMENT_OF_INERTIA,
 				moduleCfg,
-				constants.swerveConstants.getModuleLocations());
+				swerveConfig.getModuleLocations());
 
 		return robotConfig;
 	}

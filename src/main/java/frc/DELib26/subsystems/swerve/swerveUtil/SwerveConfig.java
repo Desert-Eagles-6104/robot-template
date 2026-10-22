@@ -39,7 +39,7 @@ import frc.DELib26.subsystems.swerve.MapleSimSwerveDrivetrain;
  * (e.g. {@link Distance}, {@link LinearVelocity}, {@link Angle}, {@link Current})
  * so the underlying units can be changed centrally without renaming fields.
  */
-public abstract class SwerveConstants {
+public abstract class SwerveConfig {
 
 	// ---------------------------------------------------------------------
 	// Identity & CAN bus

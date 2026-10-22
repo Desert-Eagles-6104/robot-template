@@ -13,14 +13,14 @@ import frc.DELib26.subsystems.swerve.swerveCommands.TeleopDrive;
 import frc.DELib26.subsystems.swerve.swerveCommands.tuning.SetDrivePidfSlotConfigs;
 import frc.DELib26.subsystems.swerve.swerveCommands.tuning.SetRotationPidConfigs;
 import frc.DELib26.subsystems.swerve.swerveCommands.tuning.SwerveSysID;
-import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConstants;
+import frc.DELib26.subsystems.swerve.swerveUtil.SwerveConfig;
 import frc.DELib26.subsystems.swerve.swerveUtil.SysIdMechanism;
 import frc.DELib26.util.dashboard.DashboardUtils;
 
 public class SwervePidCalibrationsBindings extends Bindings {
 
 	private final SwerveSubsystem swerve;
-	private final SwerveConstants swerveConstants;
+	private final SwerveConfig swerveConstants;
 
 	private static final String DASHBOARD_FOLDER = "Swerve Pid Calibrations";
 	private static final String VALUES_FOLDER = DASHBOARD_FOLDER + "/Values/";
@@ -63,7 +63,7 @@ public class SwervePidCalibrationsBindings extends Bindings {
 	private Slot0Configs initDriveSlot0;
 	private Slot0Configs initSteerSlot0;
 
-	public SwervePidCalibrationsBindings(SwerveSubsystem swerve, SwerveConstants swerveConstants) {
+	public SwervePidCalibrationsBindings(SwerveSubsystem swerve, SwerveConfig swerveConstants) {
 		this.swerve = swerve;
 		this.swerveConstants = swerveConstants;
 	}
